@@ -297,12 +297,18 @@ int main() {
             }
             if (choice == 1) {
                 students = readStudentsFromConsole();
+                selectedMethod = CalculationMethod::Average;
+                printStudents(students, selectedMethod);
             } else if (choice == 2) {
                 students = generateRandomStudents();
+                selectedMethod = CalculationMethod::Average;
+                printStudents(students, selectedMethod);
             } else if (choice == 3) {
                 students = readStudentsFromFile("Students.txt");
                 std::cout << students.size()
                           << " student records loaded from Students.txt.\n";
+                selectedMethod = CalculationMethod::Average;
+                printStudents(students, selectedMethod);
             } else if (choice == 4) {
                 if (students.empty()) {
                     std::cout << "No student data is available.\n";
