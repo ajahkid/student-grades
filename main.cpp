@@ -1,4 +1,5 @@
 #include <algorithm>
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <random>
@@ -26,12 +27,14 @@ public:
         calculateFinalGrade(CalculationMethod::Average);
     }
 
+    // Rule of three: copy constructor, assignment operator, and destructor.
     Person(const Person& other)
         : firstName_(other.firstName_),
           surname_(other.surname_),
           homework_(other.homework_),
           exam_(other.exam_),
-          finalGrade_(other.finalGrade_) {}
+          finalGrade_(other.finalGrade_),
+          selectedMethod_(other.selectedMethod_) {}
 
     Person& operator=(const Person& other) {
         if (this != &other) {
@@ -40,6 +43,7 @@ public:
             homework_ = other.homework_;
             exam_ = other.exam_;
             finalGrade_ = other.finalGrade_;
+            selectedMethod_ = other.selectedMethod_;
         }
         return *this;
     }
@@ -48,6 +52,7 @@ public:
 
     void calculateFinalGrade(CalculationMethod method) {
         finalGrade_ = finalGrade(method);
+        selectedMethod_ = method;
     }
 
     [[nodiscard]] double finalGrade(CalculationMethod method) const {
@@ -96,6 +101,7 @@ private:
     std::vector<int> homework_;
     int exam_ = 0;
     double finalGrade_ = 0.0;
+    CalculationMethod selectedMethod_ = CalculationMethod::Average;
 };
 
 std::istream& operator>>(std::istream& in, Person& person) {
@@ -139,9 +145,10 @@ std::istream& operator>>(std::istream& in, Person& person) {
 
 std::ostream& operator<<(std::ostream& out, const Person& person) {
     out << std::left << std::setw(14) << person.firstName_
-        << std::setw(14) << person.surname_
-        << std::right << std::setw(18) << std::fixed
-        << std::setprecision(2) << person.finalGrade_;
+        << std::setw(14) << person.surname_ << std::right << std::setw(13)
+        << std::fixed << std::setprecision(2)
+        << person.finalGrade(CalculationMethod::Average) << " | "
+        << std::setw(12) << person.finalGrade(CalculationMethod::Median);
     return out;
 }
 
@@ -149,17 +156,24 @@ std::string methodName(CalculationMethod method) {
     return method == CalculationMethod::Average ? "Average" : "Median";
 }
 
+void sortStudents(std::vector<Person>& students) {
+    std::sort(students.begin(), students.end(),
+              [](const Person& left, const Person& right) {
+                  if (left.surname() != right.surname()) {
+                      return left.surname() < right.surname();
+                  }
+                  return left.firstName() < right.firstName();
+              });
+}
+
 void printStudents(const std::vector<Person>& students,
-                   CalculationMethod method) {
-    std::cout << "\nSelected final grade calculation: " << methodName(method)
-              << "\n\n"
-              << "Name          Surname        Final_Point\n"
-              << "-----------------------------------------\n";
+                   CalculationMethod selectedMethod) {
+    std::cout << "\nSelected final grade calculation: "
+              << methodName(selectedMethod) << "\n\n"
+              << "Name          Surname        Final (Avg.) | Final (Med.)\n"
+              << "------------------------------------------------------------\n";
     for (const Person& student : students) {
-        std::cout << std::left << std::setw(14) << student.firstName()
-                  << std::setw(14) << student.surname() << std::right
-                  << std::setw(12) << std::fixed << std::setprecision(2)
-                  << student.finalGrade(method) << '\n';
+        std::cout << student << '\n';
     }
 }
 
@@ -181,6 +195,55 @@ std::vector<Person> readStudentsFromConsole() {
         }
         students.push_back(student);
     }
+    sortStudents(students);
+    return students;
+}
+
+std::vector<Person> readStudentsFromFile(const std::string& fileName) {
+    std::ifstream input(fileName);
+    if (!input) {
+        throw std::runtime_error("Could not open " + fileName + ".");
+    }
+
+    std::string line;
+    std::getline(input, line);  // Skip the column header.
+    std::vector<Person> students;
+
+    while (std::getline(input, line)) {
+        if (line.empty()) {
+            continue;
+        }
+
+        std::istringstream row(line);
+        std::string firstName;
+        std::string surname;
+        row >> firstName >> surname;
+        if (firstName.empty() || surname.empty()) {
+            throw std::runtime_error("Invalid row in " + fileName + ": " +
+                                     line);
+        }
+
+        std::vector<int> scores;
+        int score = 0;
+        while (row >> score) {
+            if (score < 0 || score > 10) {
+                throw std::runtime_error("Score outside 0..10 in " + fileName +
+                                         ": " + line);
+            }
+            scores.push_back(score);
+        }
+
+        if (scores.size() < 2) {
+            throw std::runtime_error(
+                "Each file row needs at least one homework score and an exam.");
+        }
+
+        const int exam = scores.back();
+        scores.pop_back();
+        students.emplace_back(firstName, surname, scores, exam);
+    }
+
+    sortStudents(students);
     return students;
 }
 
@@ -205,17 +268,20 @@ std::vector<Person> generateRandomStudents() {
             "Student" + std::to_string(index + 1),
             "Generated" + std::to_string(index + 1), homeworkCount, generator));
     }
+    sortStudents(students);
     return students;
 }
 
 int main() {
     std::vector<Person> students;
+    CalculationMethod selectedMethod = CalculationMethod::Average;
 
     while (true) {
         std::cout << "\nStudent final grade calculator\n"
                   << "1. Enter student data\n"
                   << "2. Generate random student data\n"
-                  << "3. Display final grades\n"
+                  << "3. Read data from Students.txt\n"
+                  << "4. Display final grades\n"
                   << "0. Exit\n"
                   << "Choice: ";
 
@@ -234,17 +300,23 @@ int main() {
             } else if (choice == 2) {
                 students = generateRandomStudents();
             } else if (choice == 3) {
+                students = readStudentsFromFile("Students.txt");
+                std::cout << students.size()
+                          << " student records loaded from Students.txt.\n";
+            } else if (choice == 4) {
                 if (students.empty()) {
                     std::cout << "No student data is available.\n";
                     continue;
                 }
                 std::cout << "1. Average\n2. Median\nChoice: ";
                 int methodChoice = 0;
-                std::cin >> methodChoice;
-                printStudents(
-                    students,
-                    methodChoice == 2 ? CalculationMethod::Median
-                                      : CalculationMethod::Average);
+                if (!(std::cin >> methodChoice)) {
+                    throw std::runtime_error("Invalid calculation method.");
+                }
+                selectedMethod = methodChoice == 2
+                                     ? CalculationMethod::Median
+                                     : CalculationMethod::Average;
+                printStudents(students, selectedMethod);
             } else {
                 std::cout << "Unknown menu choice.\n";
             }
