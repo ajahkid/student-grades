@@ -27,7 +27,7 @@ public:
         calculateFinalGrade(CalculationMethod::Average);
     }
 
-    // Rule of three: copy constructor, assignment operator, and destructor.
+    
     Person(const Person& other)
         : firstName_(other.firstName_),
           surname_(other.surname_),
@@ -206,7 +206,7 @@ std::vector<Person> readStudentsFromFile(const std::string& fileName) {
     }
 
     std::string line;
-    std::getline(input, line);  // Skip the column header.
+    std::getline(input, line);  
     std::vector<Person> students;
 
     while (std::getline(input, line)) {
