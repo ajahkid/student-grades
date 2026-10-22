@@ -1,4 +1,8 @@
-﻿List<string> serviceJobs = new List<string>();
+﻿using System.Text.Json;
+
+const string serviceJobsFile = "service-jobs.json";
+bool canSaveServiceJobs = true;
+List<string> serviceJobs = LoadServiceJobs();
 bool isRunning = true;
 
 while (isRunning)
@@ -62,6 +66,7 @@ void AddServiceJob()
 
 	serviceJobs.Add(serviceJob);
 	Console.WriteLine("Service job added.");
+	SaveServiceJobs();
 }
 
 void ListServiceJobs()
@@ -129,4 +134,44 @@ void DeleteServiceJob()
 
 	serviceJobs.RemoveAt(jobNumber - 1);
 	Console.WriteLine("Service job deleted.");
+	SaveServiceJobs();
+}
+
+List<string> LoadServiceJobs()
+{
+	if (!File.Exists(serviceJobsFile))
+	{
+		return new List<string>();
+	}
+
+	try
+	{
+		return JsonSerializer.Deserialize<List<string>>(File.ReadAllText(serviceJobsFile)) ?? new List<string>();
+	}
+	catch (JsonException)
+	{
+		canSaveServiceJobs = false;
+		Console.WriteLine($"Could not read {serviceJobsFile}; existing data will not be overwritten.");
+		return new List<string>();
+	}
+}
+
+void SaveServiceJobs()
+{
+	if (!canSaveServiceJobs)
+	{
+		Console.WriteLine("Saving is disabled until the existing JSON file is fixed.");
+		return;
+	}
+
+	try
+	{
+		string json = JsonSerializer.Serialize(serviceJobs, new JsonSerializerOptions { WriteIndented = true });
+		File.WriteAllText(serviceJobsFile, json);
+		Console.WriteLine($"Service jobs saved to {serviceJobsFile}.");
+	}
+	catch (Exception exception) when (exception is IOException || exception is UnauthorizedAccessException)
+	{
+		Console.WriteLine($"Could not save service jobs: {exception.Message}");
+	}
 }

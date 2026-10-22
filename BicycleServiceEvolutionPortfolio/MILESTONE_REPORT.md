@@ -35,6 +35,16 @@ The project tracks customers, their bicycles, and the service jobs requested for
 **Current limitation:** Jobs still disappear when the program closes. JSON loading and saving are the next Milestone 1 step.
 **Verification:** The project built successfully. A scripted run added Tina's Trek FX flat-tire job, listed it, found it using lowercase `flat`, deleted job 1, confirmed the list was empty, and exited cleanly.
 
+## Checkpoint 3: JSON Persistence
+
+**Date:** 2026-10-22
+**Version:** Milestone 1, persistent service job storage
+**What changed:** The app loads jobs from `service-jobs.json` at startup and saves the list after adding or deleting a job. If the existing JSON is malformed, the app leaves it untouched and disables saving to protect the file.
+**Why:** Service records should remain available after the console app closes.
+**Concepts:** `System.Text.Json`, file reading and writing, `File.Exists`, and exception handling.
+**Current limitation:** The file stores the existing string representation of each job. Milestone 2 will replace it with `Customer`, `Bicycle`, and `ServiceJob` classes.
+**Verification:** The project built successfully. A scripted run in a temporary working directory added a job, restarted and listed it, deleted it, then restarted again and confirmed the list was empty.
+
 ## Next Checkpoints
 
-The next Milestone 1 checkpoint will add and test JSON loading and saving. Later entries will explain how the OOP, layered, database, and API versions evolve from this same workflow.
+Milestone 1 is complete. The next checkpoint will begin Milestone 2 by modeling customers, bicycles, and service jobs as classes while retaining JSON persistence.
