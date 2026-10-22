@@ -66,15 +66,41 @@ Milestone 1 is complete. The console app builds, its Add/List/Find/Delete workfl
 **Current limitation:** The file stores the existing string representation of each job. Milestone 2 will replace it with `Customer`, `Bicycle`, and `ServiceJob` classes.
 **Verification:** The project built successfully. A scripted run in a temporary working directory added a job, restarted and listed it, deleted it, then restarted again and confirmed the list was empty.
 
+## Checkpoint 4: OOP Models and Nested JSON
+
+**Date:** 2026-10-22
+**Version:** Milestone 2, object-oriented console application
+**What changed:** Created a separate console project with `Customer`, `Bicycle`, and `ServiceJob` classes. Customers contain bicycles, and bicycles contain service jobs. The app keeps the Add/List/Find/Delete workflow and saves the nested objects to `service-customers.json`. Adding another job for the same customer and bicycle reuses those objects.
+**Why:** This milestone practices representing the shop's real relationships with objects instead of storing each job as one formatted string.
+**Concepts:** Classes, properties, constructors, object relationships, lists, decimal validation, and nested JSON serialization.
+**Current limitation:** The menu creates jobs with `Requested` status and an estimated cost. It does not yet provide an action to update status or enter final cost.
+**Verification:** The project built successfully. A scripted run added two jobs to the same customer and bicycle, found them, deleted one, restarted the app, and confirmed the remaining job was loaded from JSON.
+
+## Milestone 2 Reflection: OOP and JSON Persistence
+
+### What I Built
+
+I made a second console app that keeps the same service-job actions as Milestone 1, but stores the information in three connected classes. A customer can have bicycles, and each bicycle can have several service jobs. The app saves those objects as nested JSON.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Changing from one long string to related objects:** In Milestone 1, each job was stored as formatted text. This time, I had to decide which information belonged to the customer, bicycle, or service job. I used lists to represent the relationships: customers contain bicycles, and bicycles contain their service jobs.
+- **Avoiding duplicate customer and bicycle records:** Adding a second job for the same customer could have created duplicate objects. I made the app look for a matching customer and bicycle first, then add the new job to the existing records.
+- **Saving the new object structure:** The JSON format now has several levels instead of a simple list of strings. I tested it by adding multiple jobs for the same bicycle, restarting the program, and confirming the data loaded and a deletion stayed deleted.
+
+### What I Learned
+
+I learned how classes can represent parts of a real problem and how objects can be connected to each other. I also learned that a nested object model can make information easier to organize, but it means I need to test that the relationships survive saving and loading.
+
+### Milestone 2 Outcome
+
+Milestone 2 is complete. The separate app builds, supports the same core job workflow, and saves related customer, bicycle, and service-job objects as JSON. The current menu records the estimated cost and starts each job as `Requested`; changing status and recording final cost remain outside this version's workflow.
+
 ## Next Checkpoints
 
-Milestone 1 is complete. The next checkpoint will begin Milestone 2 by modeling customers, bicycles, and service jobs as classes while retaining JSON persistence.
+Milestones 1 and 2 are complete. The next checkpoint will begin Milestone 3 by separating the console presentation, service logic, and data access, then adding user registration and login.
 
 ## Future Milestone Reflections
-
-### Milestone 2: OOP and Persistence
-
-_To be completed after implementation and testing._
 
 ### Milestone 3: Layered Multi-user Console
 

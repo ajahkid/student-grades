@@ -14,16 +14,18 @@ The same idea will grow through each milestone:
 
 ## Current Progress
 
-Milestone 1 is complete. The console menu supports adding, listing, finding, and deleting service jobs, and saves them to `service-jobs.json` in the current working directory.
+Milestone 1 is complete. Its console menu supports adding, listing, finding, and deleting service jobs, and saves them to `service-jobs.json` in the current working directory.
 
-Milestones 2–5 are planned only. Their folders contain notes, not working applications yet.
+Milestone 2 is complete. A separate console app models customers, bicycles, and service jobs as related objects and saves the nested data to `service-customers.json`. The same customer and bicycle are reused when another job is added for them.
+
+Milestones 3–5 are planned only. Their folders contain notes, not working applications yet.
 
 ## Milestone Plan
 
 | Milestone | What the version will add | Status |
 | --- | --- | --- |
 | 1. Basic Console | Menu, variables, if/else, loop, methods, collection, Add/List/Find/Delete, JSON file | Complete |
-| 2. OOP and Persistence | `Customer`, `Bicycle`, and `ServiceJob` classes; properties; constructors; encapsulation; JSON file | Planned |
+| 2. OOP and Persistence | `Customer`, `Bicycle`, and `ServiceJob` classes; properties; constructors; encapsulation; JSON file | Complete |
 | 3. Layered Multi-user Console | Presentation, service, and repository layers; validation; register/login/logout; each user sees their own records | Planned |
 | 4. Database | SQL tables and relationships; EF Core with SQLite; basic database queries | Planned |
 | 5. Web API | ASP.NET Core endpoints; GET, POST, PUT, DELETE; DTOs; validation; HTTP status codes; Swagger | Planned |
@@ -34,6 +36,14 @@ From the repository root, run:
 
 ```powershell
 dotnet run --project BicycleServiceEvolutionPortfolio/Milestone01_BasicConsole/BicycleService.Milestone01.BasicConsole.csproj
+```
+
+## Run Milestone 2
+
+From the repository root, run:
+
+```powershell
+dotnet run --project BicycleServiceEvolutionPortfolio/Milestone02_OOP/BicycleService.Milestone02.OOP.csproj
 ```
 
 ## Understanding the Code
