@@ -25,6 +25,16 @@ The project tracks customers, their bicycles, and the service jobs requested for
 **Current limitation:** The list exists only while the program runs. List/Find/Delete and JSON saving are not implemented yet.
 **Verification:** The project built. A test run entered `Tina`, `Trek FX`, `Flat tire`, and `25` for the Add prompts; the app confirmed the job was added, returned to the menu, and exited cleanly after `0`.
 
+## Checkpoint 2: List, Find, and Delete
+
+**Date:** 2026-10-22
+**Version:** Milestone 1, in-memory service job management
+**What changed:** Added separate methods for adding, listing, finding, and deleting service jobs. The list displays numbered jobs, Find searches customer, bicycle, and issue text without case sensitivity, and Delete removes a selected job by its displayed number.
+**Why:** These actions complete the basic service-job workflow before adding persistence.
+**Concepts:** Methods, `List<string>`, `for`, `if`, `StringComparison`, and `int.TryParse`.
+**Current limitation:** Jobs still disappear when the program closes. JSON loading and saving are the next Milestone 1 step.
+**Verification:** The project built successfully. A scripted run added Tina's Trek FX flat-tire job, listed it, found it using lowercase `flat`, deleted job 1, confirmed the list was empty, and exited cleanly.
+
 ## Next Checkpoints
 
-The next Milestone 1 checkpoints will add and test List, Find, Delete, and JSON persistence. Later entries will explain how the OOP, layered, database, and API versions evolve from this same workflow.
+The next Milestone 1 checkpoint will add and test JSON loading and saving. Later entries will explain how the OOP, layered, database, and API versions evolve from this same workflow.

@@ -14,9 +14,9 @@ The same idea will grow through each milestone:
 
 ## Current Progress
 
-Milestone 1 is in progress. The console menu works, and option 1 collects a customer's name, bicycle model, repair issue, and estimated cost. Jobs are currently kept in memory, so they disappear when the program closes.
+Milestone 1 is in progress. The console menu supports adding, listing, finding, and deleting service jobs. Jobs are currently kept in memory, so they disappear when the program closes.
 
-Still to add in Milestone 1: separate methods, List/Find/Delete actions, and saving/loading jobs as JSON.
+Still to add in Milestone 1: saving and loading jobs as JSON.
 
 Milestones 2–5 are planned only. Their folders contain notes, not working applications yet.
 
@@ -24,7 +24,7 @@ Milestones 2–5 are planned only. Their folders contain notes, not working appl
 
 | Milestone | What the version will add | Status |
 | --- | --- | --- |
-| 1. Basic Console | Menu, variables, if/else, loop, methods, collection, Add/List/Find/Delete, JSON file | In progress: menu and in-memory Add work |
+| 1. Basic Console | Menu, variables, if/else, loop, methods, collection, Add/List/Find/Delete, JSON file | In progress: in-memory Add/List/Find/Delete work |
 | 2. OOP and Persistence | `Customer`, `Bicycle`, and `ServiceJob` classes; properties; constructors; encapsulation; JSON file | Planned |
 | 3. Layered Multi-user Console | Presentation, service, and repository layers; validation; register/login/logout; each user sees their own records | Planned |
 | 4. Database | SQL tables and relationships; EF Core with SQLite; basic database queries | Planned |
