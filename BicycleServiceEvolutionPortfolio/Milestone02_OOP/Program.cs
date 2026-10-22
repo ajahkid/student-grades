@@ -24,6 +24,7 @@ internal class Program
 			Console.WriteLine("2. List service jobs");
 			Console.WriteLine("3. Find a service job");
 			Console.WriteLine("4. Delete a service job");
+			Console.WriteLine("5. Update a service job");
 			Console.WriteLine("0. Exit");
 			Console.Write("Choose an option: ");
 
@@ -50,9 +51,13 @@ internal class Program
 			{
 				DeleteServiceJob();
 			}
+			else if (choice == "5")
+			{
+				UpdateServiceJob();
+			}
 			else
 			{
-				Console.WriteLine("Please enter 1, 2, 3, 4, or 0.");
+				Console.WriteLine("Please enter 1, 2, 3, 4, 5, or 0.");
 			}
 		}
 	}
@@ -166,6 +171,60 @@ internal class Program
 		SaveCustomers();
 	}
 
+	private static void UpdateServiceJob()
+	{
+		List<(Customer Customer, Bicycle Bicycle, ServiceJob Job)> serviceJobs = GetAllServiceJobs();
+
+		if (serviceJobs.Count == 0)
+		{
+			Console.WriteLine("There are no service jobs to update.");
+			return;
+		}
+
+		for (int index = 0; index < serviceJobs.Count; index++)
+		{
+			DisplayServiceJob(index + 1, serviceJobs[index]);
+		}
+
+		Console.Write("Enter the service job number to update: ");
+		string? jobNumberInput = Console.ReadLine();
+
+		if (!int.TryParse(jobNumberInput, out int jobNumber) || jobNumber < 1 || jobNumber > serviceJobs.Count)
+		{
+			Console.WriteLine("That is not a valid service job number.");
+			return;
+		}
+
+		Console.WriteLine("Choose a status:");
+		Console.WriteLine("1. Requested");
+		Console.WriteLine("2. In Progress");
+		Console.WriteLine("3. Completed");
+		Console.WriteLine("4. Cancelled");
+		Console.Write("Status: ");
+		string? statusChoice = Console.ReadLine();
+
+		string? status = statusChoice switch
+		{
+			"1" => "Requested",
+			"2" => "In Progress",
+			"3" => "Completed",
+			"4" => "Cancelled",
+			_ => null
+		};
+
+		if (status is null)
+		{
+			Console.WriteLine("That is not a valid status.");
+			return;
+		}
+
+		(Customer Customer, Bicycle Bicycle, ServiceJob Job) selectedJob = serviceJobs[jobNumber - 1];
+		selectedJob.Job.Status = status;
+		selectedJob.Job.FinalCost = ReadOptionalFinalCost(selectedJob.Job.FinalCost);
+		Console.WriteLine("Service job updated.");
+		SaveCustomers();
+	}
+
 	private static List<(Customer Customer, Bicycle Bicycle, ServiceJob Job)> GetAllServiceJobs()
 	{
 		List<(Customer Customer, Bicycle Bicycle, ServiceJob Job)> serviceJobs = new();
@@ -228,6 +287,30 @@ internal class Program
 			}
 
 			Console.WriteLine("Please enter a valid non-negative cost.");
+		}
+	}
+
+	private static decimal? ReadOptionalFinalCost(decimal? currentFinalCost)
+	{
+		while (true)
+		{
+			string currentCostText = currentFinalCost.HasValue
+				? currentFinalCost.Value.ToString("F2", CultureInfo.CurrentCulture)
+				: "not set";
+			Console.Write($"Final cost (press Enter to keep {currentCostText}): ");
+			string? input = Console.ReadLine();
+
+			if (string.IsNullOrWhiteSpace(input))
+			{
+				return currentFinalCost;
+			}
+
+			if (decimal.TryParse(input, NumberStyles.Number, CultureInfo.CurrentCulture, out decimal finalCost) && finalCost >= 0)
+			{
+				return finalCost;
+			}
+
+			Console.WriteLine("Please enter a valid non-negative cost or press Enter to keep the current value.");
 		}
 	}
 

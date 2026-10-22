@@ -70,11 +70,11 @@ Milestone 1 is complete. The console app builds, its Add/List/Find/Delete workfl
 
 **Date:** 2026-10-22
 **Version:** Milestone 2, object-oriented console application
-**What changed:** Created a separate console project with `Customer`, `Bicycle`, and `ServiceJob` classes. Customers contain bicycles, and bicycles contain service jobs. The app keeps the Add/List/Find/Delete workflow and saves the nested objects to `service-customers.json`. Adding another job for the same customer and bicycle reuses those objects.
+**What changed:** Created a separate console project with `Customer`, `Bicycle`, and `ServiceJob` classes. Customers contain bicycles, and bicycles contain service jobs. The app supports Add/List/Find/Update/Delete and saves the nested objects to `service-customers.json`. Adding another job for the same customer and bicycle reuses those objects. Update lets the user change status and enter a final cost.
 **Why:** This milestone practices representing the shop's real relationships with objects instead of storing each job as one formatted string.
 **Concepts:** Classes, properties, constructors, object relationships, lists, decimal validation, and nested JSON serialization.
-**Current limitation:** The menu creates jobs with `Requested` status and an estimated cost. It does not yet provide an action to update status or enter final cost.
-**Verification:** The project built successfully. A scripted run added two jobs to the same customer and bicycle, found them, deleted one, restarted the app, and confirmed the remaining job was loaded from JSON.
+**Current limitation:** Jobs can be updated to Requested, In Progress, Completed, or Cancelled, but the app does not yet support editing customer or bicycle details.
+**Verification:** The project built successfully. A scripted run added two jobs to the same customer and bicycle, found them, deleted one, restarted the app, and confirmed the remaining job was loaded from JSON. A separate run set a job to Completed, entered a final cost, restarted the app, and confirmed both values persisted.
 
 ## Milestone 2 Reflection: OOP and JSON Persistence
 
@@ -87,6 +87,7 @@ I made a second console app that keeps the same service-job actions as Milestone
 - **Changing from one long string to related objects:** In Milestone 1, each job was stored as formatted text. This time, I had to decide which information belonged to the customer, bicycle, or service job. I used lists to represent the relationships: customers contain bicycles, and bicycles contain their service jobs.
 - **Avoiding duplicate customer and bicycle records:** Adding a second job for the same customer could have created duplicate objects. I made the app look for a matching customer and bicycle first, then add the new job to the existing records.
 - **Saving the new object structure:** The JSON format now has several levels instead of a simple list of strings. I tested it by adding multiple jobs for the same bicycle, restarting the program, and confirming the data loaded and a deletion stayed deleted.
+- **Tracking a job through completion:** The model already had status and final-cost properties, but the menu did not let me change them. I added an update action with a short list of valid statuses and non-negative cost validation, then restarted the app to check the changes were saved.
 
 ### What I Learned
 
@@ -94,7 +95,7 @@ I learned how classes can represent parts of a real problem and how objects can 
 
 ### Milestone 2 Outcome
 
-Milestone 2 is complete. The separate app builds, supports the same core job workflow, and saves related customer, bicycle, and service-job objects as JSON. The current menu records the estimated cost and starts each job as `Requested`; changing status and recording final cost remain outside this version's workflow.
+Milestone 2 is complete. The separate app builds, supports Add/List/Find/Update/Delete, and saves related customer, bicycle, and service-job objects as JSON. Jobs start as `Requested` and can be updated with a status and final cost.
 
 ## Next Checkpoints
 

@@ -16,7 +16,7 @@ The same idea will grow through each milestone:
 
 Milestone 1 is complete. Its console menu supports adding, listing, finding, and deleting service jobs, and saves them to `service-jobs.json` in the current working directory.
 
-Milestone 2 is complete. A separate console app models customers, bicycles, and service jobs as related objects and saves the nested data to `service-customers.json`. The same customer and bicycle are reused when another job is added for them.
+Milestone 2 is complete. A separate console app models customers, bicycles, and service jobs as related objects and saves the nested data to `service-customers.json`. The same customer and bicycle are reused when another job is added for them. Service jobs can also be updated with a status and final cost.
 
 Milestones 3–5 are planned only. Their folders contain notes, not working applications yet.
 
