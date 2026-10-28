@@ -27,9 +27,39 @@ I learned that a larger program feels easier to manage when I build and test it 
 
 Milestone 1 is complete. The console app builds, its Add/List/Find/Delete workflow has been tested, and JSON persistence has been verified across restarts. The detailed implementation checkpoints and verification notes follow below.
 
+## Checkpoint 6: SQLite Database
+
+**Date:** 2026-10-28
+**Version:** Milestone 4, EF Core database console app
+**What changed:** Created a separate console app using EF Core and SQLite. User accounts, customers, bicycles, and service jobs are stored in related tables. The app retains registration/login and the Add/List/Find/Update/Delete workflow, with user-specific records.
+**Why:** This milestone replaces file-based records with relational database storage and introduces database queries.
+**Concepts:** EF Core, `DbContext`, `DbSet`, primary/foreign-key relationships, LINQ queries, SQLite, and database persistence.
+**Current limitation:** The app creates its schema with `EnsureCreated`; it does not yet use EF Core migrations.
+**Verification:** The project restored and built without warnings after updating EF Core SQLite to `10.0.14`. A test using a temporary SQLite file registered two users, saved separate jobs, restarted, and confirmed each user could log in and see only their own record.
+
+## Milestone 4 Reflection: Database Application
+
+### What I Built
+
+I made another version of the bicycle service app, this time using EF Core with SQLite. The database has related tables for user accounts, customers, bicycles, and service jobs. The account and service-job menus still support registration, login, and the main job actions.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Connecting the database records correctly:** A job belongs to a bicycle, a bicycle belongs to a customer, and each customer belongs to a user. I represented these links with foreign keys and EF Core relationships, then tested the complete workflow using a temporary database.
+- **Keeping data separated between users:** Moving from separate JSON files to shared database tables meant I had to make sure every query was limited to the logged-in user's records. I tested with two accounts and confirmed each one only saw its own job after restarting the app.
+- **Resolving a package warning:** The first build reported a vulnerable SQLite native dependency. I checked the advisory and package updates, upgraded EF Core SQLite, and rebuilt without the warning.
+
+### What I Learned
+
+I learned how related tables use keys to connect records and how EF Core can load and save those relationships. I also learned that package warnings are worth checking instead of ignoring, especially when they point to a known security issue.
+
+### Milestone 4 Outcome
+
+Milestone 4 is complete. The app builds cleanly, saves the account and service data in SQLite, and keeps records separated by user. The database schema currently uses `EnsureCreated` rather than migrations.
+
 ## Checkpoint 5: Layered Multi-user Console
 
-**Date:** 2026-10-22
+Milestones 1 through 4 are complete. The next checkpoint will expose the service workflow through an ASP.NET Core Web API.
 **Version:** Milestone 3, layered account-based console app
 **What changed:** Created separate Presentation, Services, Repositories, and Models areas. Users can register, log in, log out, and manage service jobs. Each account's jobs are stored in its own JSON file. Passwords are saved as salted PBKDF2 hashes.
 **Why:** This milestone separates responsibilities in the code and ensures users work with their own records.
@@ -133,10 +163,6 @@ Milestone 2 is complete. The separate app builds, supports Add/List/Find/Update/
 Milestones 1 and 2 are complete. The next checkpoint will begin Milestone 3 by separating the console presentation, service logic, and data access, then adding user registration and login.
 
 ## Future Milestone Reflections
-
-### Milestone 4: Database
-
-_To be completed after implementation and testing._
 
 ### Milestone 5: Web API
 
