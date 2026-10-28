@@ -27,70 +27,8 @@ I learned that a larger program feels easier to manage when I build and test it 
 
 Milestone 1 is complete. The console app builds, its Add/List/Find/Delete workflow has been tested, and JSON persistence has been verified across restarts. The detailed implementation checkpoints and verification notes follow below.
 
-## Checkpoint 6: SQLite Database
-
-**Date:** 2026-10-28
-**Version:** Milestone 4, EF Core database console app
-**What changed:** Created a separate console app using EF Core and SQLite. User accounts, customers, bicycles, and service jobs are stored in related tables. The app retains registration/login and the Add/List/Find/Update/Delete workflow, with user-specific records.
-**Why:** This milestone replaces file-based records with relational database storage and introduces database queries.
-**Concepts:** EF Core, `DbContext`, `DbSet`, primary/foreign-key relationships, LINQ queries, SQLite, and database persistence.
-**Current limitation:** The app creates its schema with `EnsureCreated`; it does not yet use EF Core migrations.
-**Verification:** The project restored and built without warnings after updating EF Core SQLite to `10.0.14`. A test using a temporary SQLite file registered two users, saved separate jobs, restarted, and confirmed each user could log in and see only their own record.
-
-## Milestone 4 Reflection: Database Application
-
-### What I Built
-
-I made another version of the bicycle service app, this time using EF Core with SQLite. The database has related tables for user accounts, customers, bicycles, and service jobs. The account and service-job menus still support registration, login, and the main job actions.
-
-### Challenges I Faced and How I Overcame Them
-
-- **Connecting the database records correctly:** A job belongs to a bicycle, a bicycle belongs to a customer, and each customer belongs to a user. I represented these links with foreign keys and EF Core relationships, then tested the complete workflow using a temporary database.
-- **Keeping data separated between users:** Moving from separate JSON files to shared database tables meant I had to make sure every query was limited to the logged-in user's records. I tested with two accounts and confirmed each one only saw its own job after restarting the app.
-- **Resolving a package warning:** The first build reported a vulnerable SQLite native dependency. I checked the advisory and package updates, upgraded EF Core SQLite, and rebuilt without the warning.
-
-### What I Learned
-
-I learned how related tables use keys to connect records and how EF Core can load and save those relationships. I also learned that package warnings are worth checking instead of ignoring, especially when they point to a known security issue.
-
-### Milestone 4 Outcome
-
-Milestone 4 is complete. The app builds cleanly, saves the account and service data in SQLite, and keeps records separated by user. The database schema currently uses `EnsureCreated` rather than migrations.
-
-## Checkpoint 5: Layered Multi-user Console
-
-Milestones 1 through 4 are complete. The next checkpoint will expose the service workflow through an ASP.NET Core Web API.
-**Version:** Milestone 3, layered account-based console app
-**What changed:** Created separate Presentation, Services, Repositories, and Models areas. Users can register, log in, log out, and manage service jobs. Each account's jobs are stored in its own JSON file. Passwords are saved as salted PBKDF2 hashes.
-**Why:** This milestone separates responsibilities in the code and ensures users work with their own records.
-**Concepts:** Layers, interfaces, input validation, user identity, password hashing, JSON repositories, and per-user data ownership.
-**Current limitation:** The app still uses local JSON files. Milestone 4 will move persistent storage to a relational database.
-**Verification:** The project built successfully. In a temporary data folder, two users registered and added different jobs. Each user saw only their own job, both users could log in after restarting the app, and the account JSON contained password salts and hashes rather than plain-text passwords.
-
-## Milestone 3 Reflection: Layered Multi-user Console
-
-### What I Built
-
-I built a new console app and split it into layers. The Presentation layer handles the menus, the Services layer applies the rules, and the Repositories layer reads and writes JSON files. Users can register, log in, log out, and manage their bicycle service jobs.
-
-### Challenges I Faced and How I Overcame Them
-
-- **Keeping the different parts organized:** The earlier versions kept most of the workflow together. I separated the menu, service rules, and file handling into different areas, then connected them through service and repository classes.
-- **Making sure users only see their own jobs:** I gave each account its own data file and passed the logged-in user to the service layer for every job action. I tested this by creating two accounts with different jobs and checking what each account could list.
-- **Saving account passwords responsibly:** I did not want to save the password itself in the users file. I used a random salt and PBKDF2 to save a password hash, and checked the stored JSON to confirm it contained hashes rather than the original passwords.
-- **Testing logins after closing the program:** Registration working once was not enough. I restarted the app and logged in as each account to make sure the accounts and their separate jobs were still available.
-
-### What I Learned
-
-I learned that separating presentation, services, and repositories makes it easier to understand which part of the program handles each task. I also learned that user-specific data needs to be separated in storage as well as in the menus, and that passwords should not be stored as plain text.
-
-### Milestone 3 Outcome
-
-Milestone 3 is complete. The app builds, supports registration and login, separates the main responsibilities into layers, and keeps each user's service jobs in a separate JSON file.
-
 ## Checkpoint 0: Project Setup
 
-Milestones 1, 2, and 3 are complete. The next checkpoint will begin Milestone 4 by storing customers, bicycles, service jobs, and users in a relational database.
 **Version:** Portfolio structure and Milestone 1 scaffold
 **What changed:** Selected Bicycle Service (#20), created five milestone folders, and created a .NET 10 console project for Milestone 1.
 **Why:** The assignment requires inspectable versions and a consistent project idea.
@@ -158,12 +96,97 @@ I learned how classes can represent parts of a real problem and how objects can 
 
 Milestone 2 is complete. The separate app builds, supports Add/List/Find/Update/Delete, and saves related customer, bicycle, and service-job objects as JSON. Jobs start as `Requested` and can be updated with a status and final cost.
 
-## Next Checkpoints
+## Checkpoint 5: Layered Multi-user Console
 
-Milestones 1 and 2 are complete. The next checkpoint will begin Milestone 3 by separating the console presentation, service logic, and data access, then adding user registration and login.
+**Date:** 2026-10-22  
+**Version:** Milestone 3  
+**What changed:** Separated Presentation, Services, Repositories, and Models. Added registration, login, logout, and separate JSON files for each account's service jobs. Passwords are stored as salted PBKDF2 hashes.  
+**Why:** Layers clarify responsibilities, and account-specific storage keeps users' records separate.  
+**Concepts:** Interfaces, layers, validation, user identity, password hashing, and JSON repositories.  
+**Current limitation:** This version uses local JSON files; Milestone 4 moves the data into relational tables.  
+**Verification:** Two test accounts added different jobs, saw only their own records, and logged in after a restart. The account JSON contained salts and hashes, not plaintext passwords.
 
-## Future Milestone Reflections
+## Milestone 3 Reflection: Layered Multi-user Console
 
-### Milestone 5: Web API
+### What I Built
 
-_To be completed after implementation and testing._
+I split the console app into Presentation, Services, Repositories, and Models. Users can register, log in, log out, and manage their service jobs.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Organizing the application:** I separated the menu, service rules, and file handling, then connected them through service and repository classes.
+- **Keeping records private to each account:** Each account has its own data file, and job actions use the logged-in user. I tested with two accounts and checked what each could list.
+- **Protecting passwords:** I used a random salt and PBKDF2 to store password hashes instead of passwords, then checked the account JSON.
+- **Testing saved logins:** I restarted the app and logged in as each account to confirm accounts and jobs remained available.
+
+### What I Learned
+
+I learned that layers clarify which part handles each task. I also learned that user-specific data needs to be separated in storage as well as in menus, and passwords should not be stored as plain text.
+
+### Milestone 3 Outcome
+
+Milestone 3 is complete. Registration and login work, responsibilities are separated into layers, and each user's jobs are stored separately.
+
+### Checkpoint 6: SQLite Database
+
+**Date:** 2026-10-28  
+**Version:** Milestone 4  
+**What changed:** Created a separate EF Core application with related SQLite tables for users, customers, bicycles, and service jobs. It retains registration/login and Add/List/Find/Update/Delete.  
+**Why:** This replaces JSON record storage with relational database storage and queries.  
+**Concepts:** EF Core, `DbContext`, `DbSet`, primary and foreign keys, LINQ, and SQLite.  
+**Current limitation:** The schema uses `EnsureCreated`; EF Core migrations are not included.  
+**Verification:** The project built without warnings after updating EF Core SQLite to `10.0.14`. A temporary database test confirmed two accounts could log in after restart and see only their own records.
+
+## Milestone 4 Reflection: Database Application
+
+### What I Built
+
+I made a version using EF Core with SQLite. The database has related tables for user accounts, customers, bicycles, and service jobs. It retains registration, login, and the main job actions.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Connecting records correctly:** I represented links from user to customer to bicycle to service job with keys and EF Core relationships, then tested using a temporary database.
+- **Keeping users' records separate:** I made queries depend on the logged-in account and tested with two users to confirm each saw only their own job after restart.
+- **Resolving a package warning:** The first build reported a vulnerable SQLite dependency. I checked the advisory, upgraded EF Core SQLite, and rebuilt without the warning.
+
+### What I Learned
+
+I learned how keys connect related tables and how EF Core loads and saves those relationships. I also learned to investigate package warnings instead of ignoring them.
+
+### Milestone 4 Outcome
+
+Milestone 4 is complete. The app stores user and service data in SQLite. The schema currently uses `EnsureCreated` rather than migrations.
+
+### Checkpoint 7: Web API
+
+**Date:** 2026-10-28  
+**Version:** Milestone 5  
+**What changed:** Created an ASP.NET Core API with SQLite persistence, request/response DTOs, validation, Swagger UI, and GET, POST, PUT, and DELETE routes for service jobs.  
+**Why:** This makes the service workflow available through HTTP instead of only a console menu.  
+**Concepts:** Minimal APIs, route parameters, DTOs, validation, HTTP status codes, Swagger, EF Core, and SQLite.  
+**Current limitation:** The API has no authentication and is a local learning example. Its schema uses `EnsureCreated`, not migrations.  
+**Verification:** Swagger loaded. Endpoint tests returned `201` for create, `400` for invalid input, `200` for read and update, `204` for delete, and `404` after reading the deleted job.
+
+## Milestone 5 Reflection: Web API
+
+### What I Built
+
+I built a web API for bicycle service jobs. It uses HTTP requests to list, create, read, update, and delete jobs. I added DTOs, validation, SQLite storage, and Swagger to explore the API.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Returning the right result:** Requests can succeed, fail validation, or refer to a missing job. I tested the cases and used suitable HTTP status codes.
+- **Testing without a separate frontend:** I opened Swagger UI in the browser to inspect and try the endpoints.
+- **Keeping test records separate:** I pointed the API at a temporary SQLite file so the tests did not alter the normal database.
+
+### What I Learned
+
+I learned how routes and HTTP methods expose operations, why status codes help callers understand responses, and how Swagger documents and tests an API.
+
+### Milestone 5 Outcome
+
+Milestone 5 is complete. The API builds, persists data in SQLite, validates requests, exposes CRUD operations, and documents them through Swagger UI. This educational version does not include authentication.
+
+## Overall Outcome
+
+All five planned milestones are complete. Each version is kept in its own folder so I can compare how the bicycle-service idea grows from a basic console app into a layered application, database project, and Web API.

@@ -22,7 +22,7 @@ Milestone 3 is complete. It separates presentation, service logic, and JSON repo
 
 Milestone 4 is complete. A separate EF Core app stores user accounts, customers, bicycles, and service jobs in related SQLite tables.
 
-Milestone 5 is planned only. Its folder contains notes, not a working application yet.
+Milestone 5 is complete. An ASP.NET Core API exposes service-job CRUD routes, validates DTOs, returns HTTP status codes, and includes Swagger UI.
 
 ## Milestone Plan
 
@@ -32,7 +32,7 @@ Milestone 5 is planned only. Its folder contains notes, not a working applicatio
 | 2. OOP and Persistence | `Customer`, `Bicycle`, and `ServiceJob` classes; properties; constructors; encapsulation; JSON file | Complete |
 | 3. Layered Multi-user Console | Presentation, service, and repository layers; validation; register/login/logout; each user sees their own records | Complete |
 | 4. Database | SQL tables and relationships; EF Core with SQLite; basic database queries | Complete |
-| 5. Web API | ASP.NET Core endpoints; GET, POST, PUT, DELETE; DTOs; validation; HTTP status codes; Swagger | Planned |
+| 5. Web API | ASP.NET Core endpoints; GET, POST, PUT, DELETE; DTOs; validation; HTTP status codes; Swagger | Complete |
 
 ## Run Milestone 1
 
@@ -64,6 +64,14 @@ From the repository root, run:
 
 ```powershell
 dotnet run --project BicycleServiceEvolutionPortfolio/Milestone04_Database/BicycleService.Milestone04.Database.csproj
+```
+
+## Run Milestone 5
+
+From the repository root, run:
+
+```powershell
+dotnet run --project BicycleServiceEvolutionPortfolio/Milestone05_WebAPI/BicycleService.Milestone05.WebAPI.csproj
 ```
 
 ## Understanding the Code
