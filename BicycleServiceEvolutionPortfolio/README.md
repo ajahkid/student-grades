@@ -18,7 +18,9 @@ Milestone 1 is complete. Its console menu supports adding, listing, finding, and
 
 Milestone 2 is complete. A separate console app models customers, bicycles, and service jobs as related objects and saves the nested data to `service-customers.json`. The same customer and bicycle are reused when another job is added for them. Service jobs can also be updated with a status and final cost.
 
-Milestones 3–5 are planned only. Their folders contain notes, not working applications yet.
+Milestone 3 is complete. It separates presentation, service logic, and JSON repositories. Users can register, log in, and log out, and each account has its own service-job data file.
+
+Milestones 4–5 are planned only. Their folders contain notes, not working applications yet.
 
 ## Milestone Plan
 
@@ -26,7 +28,7 @@ Milestones 3–5 are planned only. Their folders contain notes, not working appl
 | --- | --- | --- |
 | 1. Basic Console | Menu, variables, if/else, loop, methods, collection, Add/List/Find/Delete, JSON file | Complete |
 | 2. OOP and Persistence | `Customer`, `Bicycle`, and `ServiceJob` classes; properties; constructors; encapsulation; JSON file | Complete |
-| 3. Layered Multi-user Console | Presentation, service, and repository layers; validation; register/login/logout; each user sees their own records | Planned |
+| 3. Layered Multi-user Console | Presentation, service, and repository layers; validation; register/login/logout; each user sees their own records | Complete |
 | 4. Database | SQL tables and relationships; EF Core with SQLite; basic database queries | Planned |
 | 5. Web API | ASP.NET Core endpoints; GET, POST, PUT, DELETE; DTOs; validation; HTTP status codes; Swagger | Planned |
 
@@ -44,6 +46,14 @@ From the repository root, run:
 
 ```powershell
 dotnet run --project BicycleServiceEvolutionPortfolio/Milestone02_OOP/BicycleService.Milestone02.OOP.csproj
+```
+
+## Run Milestone 3
+
+From the repository root, run:
+
+```powershell
+dotnet run --project BicycleServiceEvolutionPortfolio/Milestone03_LayeredConsole/BicycleService.Milestone03.LayeredConsole.csproj
 ```
 
 ## Understanding the Code

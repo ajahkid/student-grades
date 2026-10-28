@@ -27,9 +27,40 @@ I learned that a larger program feels easier to manage when I build and test it 
 
 Milestone 1 is complete. The console app builds, its Add/List/Find/Delete workflow has been tested, and JSON persistence has been verified across restarts. The detailed implementation checkpoints and verification notes follow below.
 
+## Checkpoint 5: Layered Multi-user Console
+
+**Date:** 2026-10-22
+**Version:** Milestone 3, layered account-based console app
+**What changed:** Created separate Presentation, Services, Repositories, and Models areas. Users can register, log in, log out, and manage service jobs. Each account's jobs are stored in its own JSON file. Passwords are saved as salted PBKDF2 hashes.
+**Why:** This milestone separates responsibilities in the code and ensures users work with their own records.
+**Concepts:** Layers, interfaces, input validation, user identity, password hashing, JSON repositories, and per-user data ownership.
+**Current limitation:** The app still uses local JSON files. Milestone 4 will move persistent storage to a relational database.
+**Verification:** The project built successfully. In a temporary data folder, two users registered and added different jobs. Each user saw only their own job, both users could log in after restarting the app, and the account JSON contained password salts and hashes rather than plain-text passwords.
+
+## Milestone 3 Reflection: Layered Multi-user Console
+
+### What I Built
+
+I built a new console app and split it into layers. The Presentation layer handles the menus, the Services layer applies the rules, and the Repositories layer reads and writes JSON files. Users can register, log in, log out, and manage their bicycle service jobs.
+
+### Challenges I Faced and How I Overcame Them
+
+- **Keeping the different parts organized:** The earlier versions kept most of the workflow together. I separated the menu, service rules, and file handling into different areas, then connected them through service and repository classes.
+- **Making sure users only see their own jobs:** I gave each account its own data file and passed the logged-in user to the service layer for every job action. I tested this by creating two accounts with different jobs and checking what each account could list.
+- **Saving account passwords responsibly:** I did not want to save the password itself in the users file. I used a random salt and PBKDF2 to save a password hash, and checked the stored JSON to confirm it contained hashes rather than the original passwords.
+- **Testing logins after closing the program:** Registration working once was not enough. I restarted the app and logged in as each account to make sure the accounts and their separate jobs were still available.
+
+### What I Learned
+
+I learned that separating presentation, services, and repositories makes it easier to understand which part of the program handles each task. I also learned that user-specific data needs to be separated in storage as well as in the menus, and that passwords should not be stored as plain text.
+
+### Milestone 3 Outcome
+
+Milestone 3 is complete. The app builds, supports registration and login, separates the main responsibilities into layers, and keeps each user's service jobs in a separate JSON file.
+
 ## Checkpoint 0: Project Setup
 
-**Date:** 2026-10-20
+Milestones 1, 2, and 3 are complete. The next checkpoint will begin Milestone 4 by storing customers, bicycles, service jobs, and users in a relational database.
 **Version:** Portfolio structure and Milestone 1 scaffold
 **What changed:** Selected Bicycle Service (#20), created five milestone folders, and created a .NET 10 console project for Milestone 1.
 **Why:** The assignment requires inspectable versions and a consistent project idea.
@@ -102,10 +133,6 @@ Milestone 2 is complete. The separate app builds, supports Add/List/Find/Update/
 Milestones 1 and 2 are complete. The next checkpoint will begin Milestone 3 by separating the console presentation, service logic, and data access, then adding user registration and login.
 
 ## Future Milestone Reflections
-
-### Milestone 3: Layered Multi-user Console
-
-_To be completed after implementation and testing._
 
 ### Milestone 4: Database
 
