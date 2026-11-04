@@ -1,20 +1,18 @@
-# Student Grade Calculator v0.2
+# Student Grade Calculator v0.25
 
-An upgrade of v0.1. Same menu (options 1-4), plus:
+The same program as v0.2, but the list of students can be a `std::vector`, a `std::list` or a `std::deque`.
+Only `StudentList.h` / `StudentList.cpp` know which one is used; the rest of the code does not change.
 
-- **Files.h / Files.cpp** – make, read, split and write student files.
-- **StudentList.h / StudentList.cpp** – the container (`std::vector`) and sorting.
-- **Timer.h** – a small stopwatch class.
-- **Person.h / Person.cpp** – one student (same as v0.1).
-- **Exceptions** – problems (missing file, bad row, bad input) are thrown with `throw` and caught with `try / catch` in `main.cpp`.
+`make` builds three programs:
 
-## New menu options
+- `student-grades-vector`
+- `student-grades-list`
+- `student-grades-deque`
 
-- **5** makes 5 files: `students_1000.txt` ... `students_10000000.txt` (`Name1 Surname1`, random scores).
-- **6** runs the speed test. For each file it times: read, sort, split, write.
-  Students with final grade < 5.0 go to `failed_N.txt`, the rest to `passed_N.txt`.
+Run each one, choose **5** once (makes the data files) and then **6** (speed test) and compare the times.
+Read, sort, split and write are timed for 1 000 up to 10 000 000 students.
 
-The 10 000 000 file needs a lot of memory and disk space and takes a while.
+Same files as v0.2: `Files.*` (make/read/split/write, with exceptions), `Timer.h`, `Person.*`.
 
 ## Build
 

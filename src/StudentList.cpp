@@ -10,5 +10,10 @@ bool comesBefore(const Person& first, const Person& second) {
 }
 
 void sortStudents(StudentList& students) {
+#ifdef USE_LIST
+    // std::list cannot use std::sort, it has its own sort.
+    students.sort(comesBefore);
+#else
     std::sort(students.begin(), students.end(), comesBefore);
+#endif
 }
