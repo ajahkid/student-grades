@@ -1,5 +1,5 @@
 build/
-student-grades-*
+student-grades
 *.o
 students_*.txt
 passed_*.txt

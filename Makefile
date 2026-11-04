@@ -1,19 +1,13 @@
 CXX ?= g++
 CXXFLAGS ?= -std=c++17 -O2 -Wall -Wextra -pedantic
-FILES = src/main.cpp src/Person.cpp src/StudentList.cpp src/Files.cpp
-HEADERS = src/Person.h src/StudentList.h src/Files.h src/Timer.h
+FILES = src/main.cpp src/Person.cpp src/Files.cpp
+ifeq ($(OS),Windows_NT)
+LIBS = -lpsapi
+endif
 
-all: student-grades-vector student-grades-list student-grades-deque
+student-grades: $(FILES) src/Person.h src/Files.h src/Students.h src/SpeedTest.h src/Timer.h src/Memory.h
+	$(CXX) $(CXXFLAGS) $(FILES) $(LIBS) -o student-grades
 
-student-grades-vector: $(FILES) $(HEADERS)
-	$(CXX) $(CXXFLAGS) $(FILES) -o student-grades-vector
-
-student-grades-list: $(FILES) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -DUSE_LIST $(FILES) -o student-grades-list
-
-student-grades-deque: $(FILES) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -DUSE_DEQUE $(FILES) -o student-grades-deque
-
-.PHONY: all clean
+.PHONY: clean
 clean:
-	rm -f student-grades-vector student-grades-list student-grades-deque students_*.txt passed_*.txt failed_*.txt
+	rm -f student-grades students_*.txt passed_*.txt failed_*.txt
