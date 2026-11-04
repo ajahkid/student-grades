@@ -1,36 +1,26 @@
-# Student Grade Calculator v0.1
+# Student Grade Calculator v0.2
 
-This C++17 console program calculates student grades using either the average
-or median of homework and exam scores. You can enter student data, create
-random data, or read the sample records from `Students.txt`.
+An upgrade of v0.1. Same menu (options 1-4), plus:
 
-## Source files
+- **Files.h / Files.cpp** – make, read, split and write student files.
+- **StudentList.h / StudentList.cpp** – the container (`std::vector`) and sorting.
+- **Timer.h** – a small stopwatch class.
+- **Person.h / Person.cpp** – one student (same as v0.1).
+- **Exceptions** – problems (missing file, bad row, bad input) are thrown with `throw` and caught with `try / catch` in `main.cpp`.
 
-- `src/Person.h` stores the student information and names the two grade methods.
-- `src/Person.cpp` works out the average or median grade.
-- `src/main.cpp` shows the menu and handles student data.
+## New menu options
 
-## Build and run
+- **5** makes 5 files: `students_1000.txt` ... `students_10000000.txt` (`Name1 Surname1`, random scores).
+- **6** runs the speed test. For each file it times: read, sort, split, write.
+  Students with final grade < 5.0 go to `failed_N.txt`, the rest to `passed_N.txt`.
 
-With CMake:
+The 10 000 000 file needs a lot of memory and disk space and takes a while.
 
-```text
-cmake -S . -B build
-cmake --build build
-```
+## Build
 
-With a C++17 compiler and Make:
+    make
 
-```text
-make
-```
+or with CMake:
 
-The executable is named `student-grades`. Run it from the project directory so
-it can find `Students.txt`.
-
-When entering a student by hand, type the first name, surname, homework
-scores, `-1`, and then the exam score on one line. For example:
-
-```text
-Sam Lee 8 9 10 -1 7
-```
+    cmake -S . -B build
+    cmake --build build
